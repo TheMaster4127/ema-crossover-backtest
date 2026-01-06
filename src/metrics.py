@@ -9,3 +9,6 @@ def max_drawdown(equity):
     roll_max = equity.cummax()
     drawdown = equity / roll_max - 1
     return drawdown.min()
+    
+def sharpe_ratio(returns, risk_free=0.0):
+    return (returns.mean() - risk_free) / returns.std() * (252 ** 0.5)
