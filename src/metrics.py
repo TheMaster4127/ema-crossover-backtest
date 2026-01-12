@@ -1,9 +1,36 @@
 import numpy as np
 
 def cagr(equity, periods_per_year=252):
-    total_return = equity.iloc[-1] / equity.iloc[0]
-    years = len(equity) / periods_per_year
-    return total_return ** (1 / years) - 1
+    """
+    Compute Compound Annual Growth Rate (CAGR).
+
+    Parameters
+    ----------
+    equity : pd.Series
+        Equity curve
+    periods_per_year : int
+        Trading periods per year (252 for daily data)
+
+    Returns
+    -------
+    float
+        CAGR value, or np.nan if not computable
+    """
+    equity = equity.dropna() ##
+
+    if len(equity) < periods_per_year:
+        return np.nan
+
+    start_value = equity.iloc[0]
+    end_value = equity.iloc[-1]
+
+    if start_value <= 0:
+        return np.nan
+
+    num_years = len(equity) / periods_per_year
+
+    return (end_value / start_value) ** (1 / num_years) - 1
+
 
 def max_drawdown(equity):
     roll_max = equity.cummax()
